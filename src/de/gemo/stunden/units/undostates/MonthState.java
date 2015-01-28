@@ -5,14 +5,14 @@ import de.gemo.stunden.utils.GUIUtils;
 
 public class MonthState implements UndoState {
 
-	private Month month;
+    private Month month;
 
-	public MonthState(Month month) {
-		this.month = month;
-	}
+    public MonthState(Month month) {
+        this.month = month;
+    }
 
-	@Override
-	public void show() {
-		GUIUtils.showMonthView(this.month);
-	}
+    @Override
+    public void show() {
+        GUIUtils.showMonthView(this.month);
+    }
 }

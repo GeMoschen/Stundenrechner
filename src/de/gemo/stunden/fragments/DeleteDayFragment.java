@@ -11,32 +11,32 @@ import de.gemo.stunden.utils.GUIUtils;
 
 public class DeleteDayFragment extends DialogFragment {
 
-	private final MainActivity activity;
-	private final Day day;
+    private final MainActivity activity;
+    private final Day day;
 
-	public DeleteDayFragment(MainActivity activity, Day day) {
-		this.activity = activity;
-		this.day = day;
-	}
+    public DeleteDayFragment(MainActivity activity, Day day) {
+        this.activity = activity;
+        this.day = day;
+    }
 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		return new AlertDialog.Builder(getActivity()).setTitle(day.getDateString() + " löschen?").setPositiveButton("Ja", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				// delete day
-				activity.getDayHolder().removeDay(day);
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return new AlertDialog.Builder(getActivity()).setTitle(day.getDateString() + " löschen?").setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // delete day
+                activity.getDayHolder().removeDay(day);
 
-				// save changes
-				activity.getDayHolder().save();
+                // save changes
+                activity.getDayHolder().save();
 
-				// update view
-				activity.getDayHolder().selectMonth(day.getDateString());
-				GUIUtils.showMonthView();
-			}
-		}).setNegativeButton("Nein", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				dialog.dismiss();
-			}
-		}).create();
-	}
+                // update view
+                activity.getDayHolder().selectMonth(day.getDateString());
+                GUIUtils.showMonthView();
+            }
+        }).setNegativeButton("Nein", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.dismiss();
+            }
+        }).create();
+    }
 }
