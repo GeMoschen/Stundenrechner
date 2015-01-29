@@ -1,5 +1,6 @@
 package de.gemo.stunden.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.graphics.Color;
@@ -16,24 +17,27 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import de.gemo.stunden.MainActivity;
+import de.gemo.stunden.R;
 import de.gemo.stunden.fragments.DatePickerFragment;
 import de.gemo.stunden.fragments.DeleteDayFragment;
 import de.gemo.stunden.fragments.TimePickerFragment;
+import de.gemo.stunden.units.AppDesign;
 import de.gemo.stunden.units.Day;
 import de.gemo.stunden.units.DayHolder;
 import de.gemo.stunden.units.Month;
 import de.gemo.stunden.units.OnSwipeTouchListener;
 import de.gemo.stunden.units.undostates.DayCreateState;
 import de.gemo.stunden.units.undostates.DayEditState;
+import de.gemo.stunden.units.undostates.DesignState;
 import de.gemo.stunden.units.undostates.MonthState;
 import de.gemo.stunden.units.undostates.UndoManager;
 
 public class GUICreator {
 
     private static final int TIMER_LENGTH = 350;
-    public static final int FOREGROUND = Color.rgb(255, 255, 50);
-    public static final int BACKGROUND = Color.rgb(10, 10, 10);
-    public static final int DIVIDER = Color.rgb(255, 255, 200);
+
+    public static AppDesign DESIGN;
+    private static List<AppDesign> DESIGN_LIST;
 
     public static MainActivity APP;
     public static ViewGroup MAIN_VIEW;
@@ -41,6 +45,26 @@ public class GUICreator {
 
     public static void initApp(MainActivity app) {
         APP = app;
+        DESIGN_LIST = new ArrayList<AppDesign>();
+        DESIGN_LIST.add(new AppDesign("BVB", Color.rgb(255, 255, 50), Color.rgb(10, 10, 10)));
+        DESIGN_LIST.add(new AppDesign("Klassisch", Color.rgb(115, 115, 115), Color.rgb(238, 238, 238)));
+        DESIGN_LIST.add(new AppDesign("Schwarz", Color.rgb(250, 250, 250), Color.rgb(0, 0, 0)));
+        DESIGN_LIST.add(new AppDesign("Weiss", Color.rgb(50, 50, 50), Color.rgb(255, 255, 255)));
+        DESIGN_LIST.add(new AppDesign("Rot", Color.rgb(250, 250, 250), Color.rgb(70, 0, 0)));
+        DESIGN_LIST.add(new AppDesign("Grün", Color.rgb(250, 250, 250), Color.rgb(0, 70, 0)));
+        DESIGN_LIST.add(new AppDesign("Blau", Color.rgb(250, 250, 250), Color.rgb(0, 0, 70)));
+        DESIGN_LIST.add(new AppDesign("Gelb", Color.rgb(10, 10, 10), Color.rgb(255, 255, 50)));
+        DESIGN = DESIGN_LIST.get(0);
+    }
+
+    public static void setDesign(String name) {
+        for (AppDesign design : DESIGN_LIST) {
+            if (design.getName().equalsIgnoreCase(name)) {
+                DESIGN = design;
+                (((ViewGroup) APP.findViewById(R.id.ScrollView))).setBackgroundColor(GUICreator.DESIGN.getBackground());
+                return;
+            }
+        }
     }
 
     public static void initViewGroup(ViewGroup viewGroup) {
@@ -133,7 +157,7 @@ public class GUICreator {
         }
 
         // ADD SPACER
-        GUIUtils.addSpacer(MAIN_VIEW, BACKGROUND, 200);
+        GUIUtils.addSpacer(MAIN_VIEW, DESIGN.getBackground(), 200);
     }
 
     public static void showMonthView(Month month) {
@@ -203,6 +227,16 @@ public class GUICreator {
 
                 // create menu
                 MENU.clear();
+
+                // DESIGN
+                MENU.add("Design").setOnMenuItemClickListener(new OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        UndoManager.append(new MonthState(APP.getDayHolder().getActiveMonth()));
+                        showDesignView();
+                        return true;
+                    }
+                });
 
                 // ADD
                 MENU.add("Neuer Tag").setOnMenuItemClickListener(new OnMenuItemClickListener() {
@@ -306,8 +340,8 @@ public class GUICreator {
                             // add SAVE
                             Button btn_save = new Button(APP.getApplicationContext());
                             btn_save.setText("Speichern");
-                            btn_save.setTextColor(BACKGROUND);
-                            btn_save.setBackgroundColor(FOREGROUND);
+                            btn_save.setTextColor(DESIGN.getBackground());
+                            btn_save.setBackgroundColor(DESIGN.getForeground());
                             btn_save.setOnClickListener(new OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -332,8 +366,8 @@ public class GUICreator {
                             // add OK
                             Button btn_save = new Button(APP.getApplicationContext());
                             btn_save.setText("Speichern");
-                            btn_save.setTextColor(BACKGROUND);
-                            btn_save.setBackgroundColor(FOREGROUND);
+                            btn_save.setTextColor(DESIGN.getBackground());
+                            btn_save.setBackgroundColor(DESIGN.getForeground());
                             btn_save.setOnClickListener(new OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -450,6 +484,90 @@ public class GUICreator {
                     @Override
                     public void onLongTouch() {
                         ((TextView) endViews.get(2)).setText(DateUtils.getCurrentTimeString());
+                    }
+                });
+            }
+        }.start();
+    }
+
+    private static TextView addTextView(AppDesign design) {
+        return GUIUtils.addTextView(MAIN_VIEW, design.getName());
+    }
+
+    public static void showDesignView() {
+        // clear onTouch-Listener
+        MAIN_VIEW.setOnTouchListener(null);
+
+        new CountDownTimer(TIMER_LENGTH, (int) (TIMER_LENGTH / 10)) {
+            private boolean reduceAlpha = true;
+            private int tick = 0;
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                if (reduceAlpha) {
+                    tick++;
+                    MAIN_VIEW.setAlpha(MAIN_VIEW.getAlpha() - 0.2f);
+                    if (tick == 5) {
+                        reduceAlpha = false;
+
+                        // clear view
+                        MAIN_VIEW.removeAllViews();
+
+                        // set title
+                        APP.setTitle("Design wählen...");
+
+                        // add designs
+                        final List<TextView> labels = new ArrayList<TextView>();
+                        for (final AppDesign currentDesign : DESIGN_LIST) {
+                            labels.add(addTextView(currentDesign));
+                        }
+
+                        // add listeners and set color
+                        int index = 0;
+                        for (final TextView label : labels) {
+                            final int fIndex = index;
+                            if (DESIGN == DESIGN_LIST.get(fIndex)) {
+                                label.setTextColor(Color.GREEN);
+                            } else {
+                                label.setTextColor(DESIGN.getForeground());
+                            }
+                            label.setOnClickListener(new OnClickListener() {
+
+                                @Override
+                                public void onClick(View view) {
+                                    DESIGN = DESIGN_LIST.get(fIndex);
+                                    for (final TextView otherLabels : labels) {
+                                        otherLabels.setTextColor(DESIGN.getForeground());
+                                    }
+
+                                    (((ViewGroup) APP.findViewById(R.id.ScrollView))).setBackgroundColor(GUICreator.DESIGN.getBackground());
+                                    label.setTextColor(Color.GREEN);
+                                    APP.getDayHolder().save();
+                                }
+                            });
+                            index++;
+                        }
+                    }
+                } else {
+                    MAIN_VIEW.setAlpha(MAIN_VIEW.getAlpha() + 0.2f);
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                // set alpha
+                MAIN_VIEW.setAlpha(1.0f);
+
+                // create menu
+                MENU.clear();
+
+                // ADD
+                MENU.add("Zurück").setOnMenuItemClickListener(new OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        UndoManager.append(new DesignState());
+                        showMonthView();
+                        return true;
                     }
                 });
             }

@@ -14,6 +14,7 @@ import android.util.JsonReader;
 import android.util.JsonWriter;
 import android.util.Log;
 import de.gemo.stunden.utils.DateUtils;
+import de.gemo.stunden.utils.GUICreator;
 
 public class DayHolder {
 
@@ -41,36 +42,41 @@ public class DayHolder {
             // begin array
             reader.beginArray();
 
-            // read next ID
-            reader.beginObject();
-            reader.nextName();
-            ID_COUNTER = reader.nextInt();
-            reader.endObject();
-
             // iterate...
             while (reader.hasNext()) {
                 // read data from JSON
                 reader.beginObject();
 
-                reader.nextName();
-                int ID = reader.nextInt();
+                String nextName = reader.nextName();
 
-                reader.nextName();
-                long date = reader.nextLong();
+                // handle designs
+                if (nextName.equalsIgnoreCase("nextID")) {
+                    // handle ID
+                    ID_COUNTER = reader.nextInt();
+                } else if (nextName.equalsIgnoreCase("Design")) {
+                    // handle design
+                    String designName = reader.nextString();
+                    GUICreator.setDesign(designName);
+                } else {
+                    int ID = reader.nextInt();
 
-                reader.nextName();
-                int startTime = reader.nextInt();
+                    reader.nextName();
+                    long date = reader.nextLong();
 
-                reader.nextName();
-                int endTime = reader.nextInt();
+                    reader.nextName();
+                    int startTime = reader.nextInt();
+
+                    reader.nextName();
+                    int endTime = reader.nextInt();
+
+                    // create Day
+                    Day day = new Day(ID, date);
+                    day.setStartTime(startTime);
+                    day.setEndTime(endTime);
+                    day.update();
+                    this.data.add(day);
+                }
                 reader.endObject();
-
-                // create Day
-                Day day = new Day(ID, date);
-                day.setStartTime(startTime);
-                day.setEndTime(endTime);
-                day.update();
-                this.data.add(day);
             }
 
             // close stream
@@ -106,6 +112,11 @@ public class DayHolder {
             writer.name("nextID").value(ID_COUNTER);
             writer.endObject();
 
+            // // write design
+            writer.beginObject();
+            writer.name("Design").value(GUICreator.DESIGN.getName());
+            writer.endObject();
+
             // iterate...
             for (Day day : this.data) {
                 writer.beginObject();
@@ -116,9 +127,10 @@ public class DayHolder {
                 writer.endObject();
             }
             writer.endArray();
+
+            // close
             writer.close();
 
-            Log.v("", "SAVED: " + this.data.size());
             return true;
         } catch (Exception e) {
             e.printStackTrace();

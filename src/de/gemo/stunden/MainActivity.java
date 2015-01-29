@@ -11,7 +11,6 @@ import de.gemo.stunden.utils.GUICreator;
 
 public class MainActivity extends ActionBarActivity {
 
-    public static int currentState = 0; // 0 : DAY
     private DayHolder dayHolder;
 
     @Override
@@ -21,8 +20,8 @@ public class MainActivity extends ActionBarActivity {
 
         // INIT GUIUtils
         GUICreator.initApp(this);
-        ((ViewGroup) findViewById(R.id.ScrollView)).setBackgroundColor(GUICreator.BACKGROUND);
-        GUICreator.initViewGroup((ViewGroup) findViewById(R.id.LinearLayout));
+        GUICreator.initViewGroup(((ViewGroup) findViewById(R.id.LinearLayout)));
+        ((ViewGroup) findViewById(R.id.ScrollView)).setBackgroundColor(GUICreator.DESIGN.getBackground());
 
         // initialize data
         this.dayHolder = new DayHolder(this);
@@ -39,6 +38,7 @@ public class MainActivity extends ActionBarActivity {
             }
         }.start();
     }
+
     @Override
     public void onBackPressed() {
         UndoManager.goBack();
