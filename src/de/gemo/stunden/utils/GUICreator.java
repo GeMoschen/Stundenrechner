@@ -7,10 +7,10 @@ import android.os.CountDownTimer;
 import android.support.v4.app.DialogFragment;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -30,6 +30,7 @@ import de.gemo.stunden.units.undostates.UndoManager;
 
 public class GUICreator {
 
+    private static final int TIMER_LENGTH = 350;
     public static final int FOREGROUND = Color.rgb(255, 255, 50);
     public static final int BACKGROUND = Color.rgb(10, 10, 10);
     public static final int DIVIDER = Color.rgb(255, 255, 200);
@@ -144,7 +145,7 @@ public class GUICreator {
         // clear onTouch-Listener
         MAIN_VIEW.setOnTouchListener(null);
 
-        new CountDownTimer(200, 20) {
+        new CountDownTimer(TIMER_LENGTH, (int) (TIMER_LENGTH / 10)) {
             private boolean reduceAlpha = true;
             private int tick = 0;
 
@@ -254,7 +255,7 @@ public class GUICreator {
         // clear listener
         MAIN_VIEW.setOnTouchListener(null);
 
-        new CountDownTimer(200, 20) {
+        new CountDownTimer(TIMER_LENGTH, (int) (TIMER_LENGTH / 10)) {
 
             private boolean reduceAlpha = true;
             private int tick = 0;
