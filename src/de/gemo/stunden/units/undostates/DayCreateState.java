@@ -1,6 +1,6 @@
 package de.gemo.stunden.units.undostates;
 
-import de.gemo.stunden.utils.GUIUtils;
+import de.gemo.stunden.utils.GUICreator;
 
 public class DayCreateState implements UndoState {
 
@@ -14,6 +14,6 @@ public class DayCreateState implements UndoState {
 
     @Override
     public void show() {
-        GUIUtils.showDayView(this.dateString, this.startTime, this.endTime);
+        GUICreator.showDayView(this.dateString, this.startTime, this.endTime);
     }
 }

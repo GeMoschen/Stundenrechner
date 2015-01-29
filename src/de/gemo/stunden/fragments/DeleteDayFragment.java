@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import de.gemo.stunden.MainActivity;
 import de.gemo.stunden.units.Day;
-import de.gemo.stunden.utils.GUIUtils;
+import de.gemo.stunden.utils.GUICreator;
 
 public class DeleteDayFragment extends DialogFragment {
 
@@ -31,7 +31,7 @@ public class DeleteDayFragment extends DialogFragment {
 
                 // update view
                 activity.getDayHolder().selectMonth(day.getDateString());
-                GUIUtils.showMonthView();
+                GUICreator.showMonthView();
             }
         }).setNegativeButton("Nein", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {

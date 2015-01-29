@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.ViewGroup;
 import de.gemo.stunden.units.DayHolder;
 import de.gemo.stunden.units.undostates.UndoManager;
-import de.gemo.stunden.utils.GUIUtils;
+import de.gemo.stunden.utils.GUICreator;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -20,9 +20,9 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         // INIT GUIUtils
-        GUIUtils.setApp(this);
-        ((ViewGroup) findViewById(R.id.ScrollView)).setBackgroundColor(GUIUtils.BACKGROUND);
-        GUIUtils.setViewGroup((ViewGroup) findViewById(R.id.LinearLayout));
+        GUICreator.initApp(this);
+        ((ViewGroup) findViewById(R.id.ScrollView)).setBackgroundColor(GUICreator.BACKGROUND);
+        GUICreator.initViewGroup((ViewGroup) findViewById(R.id.LinearLayout));
 
         // initialize data
         this.dayHolder = new DayHolder(this);
@@ -35,11 +35,10 @@ public class MainActivity extends ActionBarActivity {
 
             @Override
             public void onFinish() {
-                GUIUtils.showMonthView();
+                GUICreator.showMonthView();
             }
         }.start();
     }
-
     @Override
     public void onBackPressed() {
         UndoManager.goBack();
@@ -50,7 +49,7 @@ public class MainActivity extends ActionBarActivity {
         getMenuInflater().inflate(R.menu.main, menu);
 
         // init GUIUtils
-        GUIUtils.setMenu(menu);
+        GUICreator.initMenu(menu);
 
         return true;
     }

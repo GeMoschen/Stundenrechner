@@ -5,7 +5,7 @@ import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import de.gemo.stunden.utils.GUIUtils;
+import de.gemo.stunden.utils.GUICreator;
 
 /**
  * Detects left and right swipes across a view.
@@ -15,7 +15,7 @@ public class OnSwipeTouchListener implements OnTouchListener {
     private final GestureDetector gestureDetector;
 
     public OnSwipeTouchListener() {
-        this.gestureDetector = new GestureDetector(GUIUtils.APP.getApplicationContext(), new GestureListener());
+        this.gestureDetector = new GestureDetector(GUICreator.APP.getApplicationContext(), new GestureListener());
     }
 
     public boolean onSwipeLeft() {

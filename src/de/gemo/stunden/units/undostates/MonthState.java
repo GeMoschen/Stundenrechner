@@ -1,7 +1,7 @@
 package de.gemo.stunden.units.undostates;
 
 import de.gemo.stunden.units.Month;
-import de.gemo.stunden.utils.GUIUtils;
+import de.gemo.stunden.utils.GUICreator;
 
 public class MonthState implements UndoState {
 
@@ -13,6 +13,6 @@ public class MonthState implements UndoState {
 
     @Override
     public void show() {
-        GUIUtils.showMonthView(this.month);
+        GUICreator.showMonthView(this.month);
     }
 }
