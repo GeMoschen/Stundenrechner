@@ -83,7 +83,7 @@ public class GUICreator {
         MAIN_VIEW.addView(verticalLayout);
 
         // add labeled text
-        String topic = day.getDateString() + " - Pause: " + day.getPauseString() + " - Stunden: " + day.getWorkString();
+        String topic = DateUtils.getAdvancedDate(day.getDate()) + " - Pause: " + day.getPauseString() + " - Stunden: " + day.getWorkString();
         String data = day.getStartString() + " bis " + day.getEndString();
 
         final View view = GUIUtils.addLabeledText(verticalLayout, topic, data).get(0);
@@ -161,10 +161,9 @@ public class GUICreator {
     }
 
     public static void showMonthView(Month month) {
-        APP.getDayHolder().selectMonth(DayHolder.START_DAY + "." + month.getMonth() + "." + month.getYear());
+        APP.getDayHolder().selectMonth(DateUtils.getAdvancedDateString(DayHolder.START_DAY, month.getMonth(), month.getYear()));
         showMonthView();
     }
-
     public static void showMonthView() {
         // clear onTouch-Listener
         MAIN_VIEW.setOnTouchListener(null);
@@ -345,7 +344,7 @@ public class GUICreator {
                             btn_save.setOnClickListener(new OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Day day = new Day(DayHolder.getIDAndIncrement(), DateUtils.getDate(((TextView) dateViews.get(2)).getText().toString()).getTime());
+                                    Day day = new Day(DayHolder.getIDAndIncrement(), DateUtils.getAdvancedDate(((TextView) dateViews.get(2)).getText().toString()).getTime());
                                     day.setStartTime(StringUtils.getHourFromString(((TextView) startViews.get(2)).getText().toString()), StringUtils.getMinutesFromString(((TextView) startViews.get(2)).getText().toString()));
                                     day.setEndTime(StringUtils.getHourFromString(((TextView) endViews.get(2)).getText().toString()), StringUtils.getMinutesFromString(((TextView) endViews.get(2)).getText().toString()));
                                     day.update();
@@ -372,7 +371,7 @@ public class GUICreator {
                                 @Override
                                 public void onClick(View view) {
                                     // update day
-                                    day.setDate(DateUtils.getDate(((TextView) dateViews.get(2)).getText().toString()).getTime());
+                                    day.setDate(DateUtils.getAdvancedDate(((TextView) dateViews.get(2)).getText().toString()).getTime());
                                     day.setStartTime(StringUtils.getHourFromString(((TextView) startViews.get(2)).getText().toString()), StringUtils.getMinutesFromString(((TextView) startViews.get(2)).getText().toString()));
                                     day.setEndTime(StringUtils.getHourFromString(((TextView) endViews.get(2)).getText().toString()), StringUtils.getMinutesFromString(((TextView) endViews.get(2)).getText().toString()));
                                     day.update();

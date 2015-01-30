@@ -13,6 +13,7 @@ public class DateUtils {
     private static SimpleDateFormat monthFormat = new SimpleDateFormat("MM", Locale.GERMANY);
     private static SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy", Locale.GERMANY);
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY);
+    private static SimpleDateFormat advancedDateFormat = new SimpleDateFormat("EE, dd.MM.yyyy", Locale.GERMANY);
     private static SimpleDateFormat shortDateFormat = new SimpleDateFormat("dd.MM.", Locale.GERMANY);
 
     public static String getCurrentTimeString() {
@@ -51,8 +52,16 @@ public class DateUtils {
         return Integer.valueOf(yearFormat.format(date).toString());
     }
 
+    public static int getHour(Date date) {
+        return Integer.valueOf(hourFormat.format(date).toString());
+    }
+
+    public static int getMinute(Date date) {
+        return Integer.valueOf(minuteFormat.format(date).toString());
+    }
+
     public static String getCurrentDateString() {
-        return dateFormat.format(new Date()).toString();
+        return advancedDateFormat.format(new Date()).toString();
     }
 
     public static long dayBeginning(int day, int month, int year) {
@@ -82,12 +91,29 @@ public class DateUtils {
         }
     }
 
+    public static Date getAdvancedDate(String text) {
+        try {
+            return advancedDateFormat.parse(text);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return new Date();
+        }
+    }
+
     public static String getDate(long timestamp) {
         return dateFormat.format(new Date(timestamp)).toString();
     }
 
+    public static String getAdvancedDate(long timestamp) {
+        return advancedDateFormat.format(new Date(timestamp)).toString();
+    }
+
     public static String getDateString(int day, int month, int year) {
         return dateFormat.format(getDate(day, month, year)).toString();
+    }
+
+    public static String getAdvancedDateString(int day, int month, int year) {
+        return advancedDateFormat.format(getDate(day, month, year)).toString();
     }
 
     public static String getShortDate(long timestamp) {

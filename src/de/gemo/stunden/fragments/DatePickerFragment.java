@@ -7,7 +7,6 @@ import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import de.gemo.stunden.utils.DateUtils;
-import de.gemo.stunden.utils.StringUtils;
 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
@@ -16,9 +15,9 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
     public DatePickerFragment(TextView textView) {
         this.textView = textView;
-        this.day = StringUtils.getIntFromString(textView.getText().toString(), 0, "\\.");
-        this.month = StringUtils.getIntFromString(textView.getText().toString(), 1, "\\.");
-        this.year = StringUtils.getIntFromString(textView.getText().toString(), 2, "\\.");
+        this.day = DateUtils.getDay(DateUtils.getAdvancedDate(textView.getText().toString()));
+        this.month = DateUtils.getMonth(DateUtils.getAdvancedDate(textView.getText().toString()));
+        this.year = DateUtils.getYear(DateUtils.getAdvancedDate(textView.getText().toString()));
     }
 
     @Override
@@ -27,6 +26,6 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     }
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        textView.setText(DateUtils.getDateString(day, month + 1, year));
+        textView.setText(DateUtils.getAdvancedDateString(day, month + 1, year));
     }
 }

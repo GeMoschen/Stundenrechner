@@ -1,6 +1,5 @@
 package de.gemo.stunden.units;
 
-
 public class AppDesign {
     private final String name;
     private int foreground;
@@ -13,7 +12,7 @@ public class AppDesign {
         this.background = background;
         this.divider = foreground;
     }
-    
+
     public String getName() {
         return name;
     }

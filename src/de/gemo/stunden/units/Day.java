@@ -57,7 +57,7 @@ public class Day implements Comparable<Day> {
     }
 
     public String getDateString() {
-        return de.gemo.stunden.utils.DateUtils.getDate(this.date);
+        return de.gemo.stunden.utils.DateUtils.getAdvancedDate(this.date);
     }
 
     public String getPauseString() {

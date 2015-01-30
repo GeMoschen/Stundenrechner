@@ -12,7 +12,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.JsonReader;
 import android.util.JsonWriter;
-import android.util.Log;
 import de.gemo.stunden.utils.DateUtils;
 import de.gemo.stunden.utils.GUICreator;
 
@@ -139,7 +138,7 @@ public class DayHolder {
     }
 
     public void selectMonth(String date) {
-        this.activeMonth = this.getMonth(DateUtils.getDate(date));
+        this.activeMonth = this.getMonth(DateUtils.getAdvancedDate(date));
     }
 
     private Month getMonth(Date date) {
